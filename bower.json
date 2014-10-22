@@ -1,0 +1,14 @@
+{
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {},
+  "name": "chatterBots",
+  "version": "0.0.0",
+  "author": "inusara",
+  "private": true
+}
