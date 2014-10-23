@@ -5,6 +5,7 @@
  * @help        :: See http://links.sailsjs.org/docs/controllers
  */
 
+var uuid = require('node-uuid');
 var Cleverbot = require('cleverbot-node');
 var CBots = [];
 
@@ -39,7 +40,9 @@ module.exports = {
   },
 
   start: function (req, res) {
-    console.log(req.body.cbots);
+    //checks if browser session id was generated, if not fallback to node-uuid generator
+    var session_uuid = (typeof(req.body.bSId) == 'undefined' || req.body.bSId == 'null') ? uuid.v4() : req.body.bSId;
+    console.log(session_uuid);
   }
 
 };
