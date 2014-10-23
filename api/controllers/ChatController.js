@@ -33,7 +33,6 @@ module.exports = {
 
   init: function (req, res) {
     CBots = [new Cleverbot, new Cleverbot];
-    //if(CBots) req.session.cbots = CBots;
     return res.json({
       cbots: CBots
     });
@@ -42,7 +41,12 @@ module.exports = {
   start: function (req, res) {
     //checks if browser session id was generated, if not fallback to node-uuid generator
     var session_uuid = (typeof(req.body.bSId) == 'undefined' || req.body.bSId == 'null') ? uuid.v4() : req.body.bSId;
-    console.log(session_uuid);
+    if(session_uuid) {
+      req.session.chat = { session_id: session_uuid, cbots: req.body.cbots };
+      console.log(req.session.chat);
+    } else {
+      console.log("There's problem generating a session id.");
+    }
   }
 
 };
