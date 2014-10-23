@@ -1,16 +1,12 @@
 (function(){
 	
 	$('#start').click(function() {
-		io.socket.get('/init/chat', function(resData) {
-			if(resData.cbots) {
-				startChatter(resData.cbots);
-			}
-		});
+		startChatter();
 	});
 
-	var startChatter = function(resData) {
+	var startChatter = function() {
 		var browserSessionId = generateBrowserSessionId();
-		io.socket.post('/start/chat', { cbots: resData, bSId: browserSessionId }, function(resData) {
+		io.socket.post('/start/chat', { init: true, bSId: browserSessionId }, function(resData) {
 
 		});
 	}

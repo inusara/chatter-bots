@@ -46,7 +46,6 @@ module.exports.routes = {
   *                                                                          *
   ***************************************************************************/
 
-  'GET /init/chat': 'ChatController.init',
   'POST /start/chat': 'ChatController.start',
 
 };

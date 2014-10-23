@@ -31,19 +31,20 @@ module.exports = {
     });
   },
 
-  init: function (req, res) {
-    CBots = [new Cleverbot, new Cleverbot];
-    return res.json({
-      cbots: CBots
-    });
-  },
-
   start: function (req, res) {
+
+    if(req.body.init) { //if first use generate new objs
+      CBots = [new Cleverbot, new Cleverbot];
+    }
+
     //checks if browser session id was generated, if not fallback to node-uuid generator
     var session_uuid = (typeof(req.body.bSId) == 'undefined' || req.body.bSId == 'null') ? uuid.v4() : req.body.bSId;
     if(session_uuid) {
-      req.session.chat = { session_id: session_uuid, cbots: req.body.cbots };
-      console.log(req.session.chat);
+      req.session.chat = { session_id: session_uuid };
+
+      CBots[0].write('hello', function(resp){
+        console.log(resp);
+      });
     } else {
       console.log("There's problem generating a session id.");
     }
