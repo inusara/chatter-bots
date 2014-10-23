@@ -9,6 +9,11 @@ module.exports = {
 
   attributes: {
 
+  	sessionId: 'string',
+  	botIndex: 'integer',
+  	botName: 'string',
+  	message: 'string',
+
   }
 };
 
