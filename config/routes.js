@@ -34,7 +34,7 @@ module.exports.routes = {
 
   '/': {
     view: 'homepage'
-  }
+  },
 
   /***************************************************************************
   *                                                                          *
@@ -45,5 +45,8 @@ module.exports.routes = {
   * for configuration options and examples.                                  *
   *                                                                          *
   ***************************************************************************/
+
+  'GET /init/chat': 'ChatController.init',
+  'POST /start/chat': 'ChatController.start',
 
 };
