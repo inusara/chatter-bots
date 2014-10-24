@@ -1,15 +1,30 @@
-(function(){
+(function() {
 	
 	$('#start').click(function() {
-		startChatter();
+		initChat();
 	});
 
-	var startChatter = function() {
+	var initChat = function() {
 		var browserSessionId = generateBrowserSessionId();
-		io.socket.post('/start/chat', { init: true, bSId: browserSessionId }, function(resData) {
+		io.socket.post('/init/chat', { bSId: browserSessionId }, function(resData, jwres) {
+			if(jwres.statusCode === 200) {
+				startChat(0, '');
+			} else {
+				console.log(jwres.toString());
+			}
+		});		
+	};
 
+	var startChat = function(botIndex, botMsg) {
+		io.socket.post('/start/chat', { botIndex: botIndex, botMsg: botMsg }, function(resData, jwres) {
+			if(jwres.statusCode === 200) {
+				console.log(resData);
+				setTimeout(function() {
+					startChat(resData.toBotIndex, resData.botMsg);
+				}, 3000);
+			}
 		});
-	}
+	};
 
 	/* for this function to generate browser session id -- else it will use a fallback
 	Browser    Minimum Version

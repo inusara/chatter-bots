@@ -31,23 +31,32 @@ module.exports = {
     });
   },
 
-  start: function (req, res) {
-
-    if(req.body.init) { //if first use generate new objs
-      CBots = [new Cleverbot, new Cleverbot];
-    }
-
+  init: function (req, res) {
     //checks if browser session id was generated, if not fallback to node-uuid generator
     var session_uuid = (typeof(req.body.bSId) == 'undefined' || req.body.bSId == 'null') ? uuid.v4() : req.body.bSId;
+    
+    //if session was created
     if(session_uuid) {
+      CBots = [new Cleverbot, new Cleverbot];
       req.session.chat = { session_id: session_uuid };
-
-      CBots[0].write('hello', function(resp){
-        console.log(resp);
-      });
+      res.ok();
     } else {
-      console.log("There's problem generating a session id.");
+      res.forbidden("There's problem generating the session id. Please try again.");
     }
+  },
+
+  start: function (req, res) {
+    var botIndex = req.body.botIndex;
+    var botMsg = req.body.botMsg;
+
+    CBots[botIndex].write(botMsg, function(resp) {
+      var toBotIndex = (botIndex == 0) ? 1 : 0;
+      res.json({
+        botIndex: botIndex,
+        botMsg: resp.message,
+        toBotIndex: toBotIndex
+      });
+    });
   }
 
 };
