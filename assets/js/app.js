@@ -9,23 +9,23 @@
 	}
 	
 	$('#start').click(function() {
-		initChat();
+		initChat($('input:text').val());
 	});
 
-	var initChat = function() {
+	var initChat = function(topic) {
 		var browserSessionId = generateBrowserSessionId();
 		io.socket.post('/init/chat', { bSId: browserSessionId }, function(resData, jwres) {
 			if(jwres.statusCode === 200) {
-				startChat(0, '');
+				startChat(true, 0, topic);
 			} else {
 				console.log(jwres.toString());
 			}
 		});		
 	};
 
-	var startChat = function(botIndex, botMsg) {
+	var startChat = function(isFirst, botIndex, botMsg) {
 
-		if(botMsg && botSpeech.prop('checked')) {
+		if(!isFirst && botMsg && botSpeech.prop('checked')) {
 			msg = new SpeechSynthesisUtterance();
 			msg.voice = (voices) ? voices[botIndex] : null;
 			msg.voiceURI = 'native';
@@ -49,7 +49,7 @@
 				if(jwres.statusCode === 200) {
 					console.log(resData);
 					setTimeout(function() {
-						startChat(resData.toBotIndex, resData.botMsg);
+						startChat(false, resData.toBotIndex, resData.botMsg);
 					}, 1000);
 				}
 			});			
