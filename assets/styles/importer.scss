@@ -13,3 +13,23 @@
  * always omit, customize, or replace this behavior with SASS, SCSS,
  * or any other Grunt tasks you like.)
  */
+
+body  {
+	margin: 0;
+	padding: 0;
+	border: 0;
+}
+.chatbot, .chatbox {
+	float: left;
+	width: 20vw;
+	height: 100vh;
+}
+.chatbox {
+	width: 50vw;	
+}
+#chatlog {
+	position: absolute;
+	bottom: 0;
+}
+
+

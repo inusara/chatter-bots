@@ -1,4 +1,12 @@
 (function() {
+
+	var voices = [];
+	var msg;
+	var botSpeech = $('#speech');
+
+	window.speechSynthesis.onvoiceschanged = function() {
+		voices = window.speechSynthesis.getVoices();
+	}
 	
 	$('#start').click(function() {
 		initChat();
@@ -16,14 +24,36 @@
 	};
 
 	var startChat = function(botIndex, botMsg) {
-		io.socket.post('/start/chat', { botIndex: botIndex, botMsg: botMsg }, function(resData, jwres) {
-			if(jwres.statusCode === 200) {
-				console.log(resData);
-				setTimeout(function() {
-					startChat(resData.toBotIndex, resData.botMsg);
-				}, 3000);
-			}
-		});
+
+		if(botMsg && botSpeech.prop('checked')) {
+			msg = new SpeechSynthesisUtterance();
+			msg.voice = (voices) ? voices[botIndex] : null;
+			msg.voiceURI = 'native';
+			msg.volume = 1; // 0 to 1
+			msg.rate = 10; // 0.1 to 10
+			msg.pitch = 2; //0 to 2
+			msg.text = botMsg
+			msg.lang = 'en-US';
+
+			msg.onend = function(e) {
+				sendMsg();
+			};
+
+			speechSynthesis.speak(msg);
+		} else {
+			sendMsg();
+		}
+		
+		function sendMsg() {
+			io.socket.post('/start/chat', { botIndex: botIndex, botMsg: botMsg }, function(resData, jwres) {
+				if(jwres.statusCode === 200) {
+					console.log(resData);
+					setTimeout(function() {
+						startChat(resData.toBotIndex, resData.botMsg);
+					}, 1000);
+				}
+			});			
+		}
 	};
 
 	/* for this function to generate browser session id -- else it will use a fallback
