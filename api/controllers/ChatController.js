@@ -8,6 +8,7 @@
 var uuid = require('node-uuid');
 var Cleverbot = require('cleverbot-node');
 var CBots = [];
+var CBotsName = ['Zed', 'John'];
 
 module.exports = {
 	
@@ -54,7 +55,9 @@ module.exports = {
       res.json({
         botIndex: botIndex,
         botMsg: resp.message,
-        toBotIndex: toBotIndex
+        toBotIndex: toBotIndex,
+        htmlFormat: '<div><span class="name">&lt;' + CBotsName[botIndex] +
+                    '&gt;</span> <span class="msg">' + resp.message + '</span></div>',
       });
     });
   }
