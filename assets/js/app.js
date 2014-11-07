@@ -26,7 +26,7 @@
 	var startChat = function(isFirst, botIndex, botMsg) {
 
 		if(!isFirst && botMsg && botSpeech.prop('checked')) {
-			msg = new SpeechSynthesisUtterance();
+			var msg = new SpeechSynthesisUtterance();
 			msg.voice = (voices) ? voices[botIndex] : null;
 			msg.voiceURI = 'native';
 			msg.volume = 1; // 0 to 1
@@ -49,11 +49,13 @@
 				if(jwres.statusCode === 200) {
 					console.log(resData);
 					setTimeout(function() {
+						$('#chatlog').append(resData.htmlFormat);
 						startChat(false, resData.toBotIndex, resData.botMsg);
-					}, 1000);
+					}, 1200);
 				}
 			});			
 		}
+
 	};
 
 	/* for this function to generate browser session id -- else it will use a fallback
