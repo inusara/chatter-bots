@@ -3,6 +3,7 @@
 	var voices = [];
 	var msg;
 	var botSpeech = $('#speech');
+	var chatbot = $('.chatbot');
 
 	window.speechSynthesis.onvoiceschanged = function() {
 		voices = window.speechSynthesis.getVoices();
@@ -73,4 +74,11 @@
 		return [].map.call(arr, function(n) { return n.toString(16); }).join("");
 	}
 
+	$(document).ready(function() {
+		//clone all the emotion elements from the first bot section to the second
+		var clone = $('ul', chatbot[0]).clone();
+		$('input[type=radio]', clone).attr('name', 'bot2emotion');
+		$(clone).appendTo(chatbot[1]);
+	});
+	
 })();
