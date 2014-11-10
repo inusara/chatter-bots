@@ -4,6 +4,7 @@
 	var msg;
 	var botSpeech = $('#speech');
 	var chatbot = $('.chatbot');
+	var botName = ['R2D2', 'T.A.R.S'];
 
 	window.speechSynthesis.onvoiceschanged = function() {
 		voices = window.speechSynthesis.getVoices();
@@ -52,7 +53,11 @@
 		}
 		
 		function sendMsg() {
-			io.socket.post('/start/chat', { isFirst: isFirst, botIndex: botIndex, botMsg: botMsg, emotion: emotion }, function(resData, jwres) {
+			io.socket.post('/start/chat', { isFirst: isFirst, 
+											botIndex: botIndex, 
+											botName: botName[botIndex],
+											botMsg: botMsg, 
+											emotion: emotion }, function(resData, jwres) {
 				if(jwres.statusCode === 200) {
 					console.log(resData);
 					setTimeout(function() {

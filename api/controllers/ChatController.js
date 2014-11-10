@@ -8,7 +8,6 @@
 var uuid = require('node-uuid');
 var Cleverbot = require('cleverbot-node');
 var CBots = [];
-var CBotsName = ['Zed', 'John'];
 var moment = require('moment');
 
 module.exports = {
@@ -50,6 +49,7 @@ module.exports = {
   start: function (req, res) {
     var isFirst = req.body.isFirst;
     var botIndex = req.body.botIndex;
+    var botName = req.body.botName;
     var botMsg = req.body.botMsg;
     var emotion = req.body.emotion;
 
@@ -65,7 +65,7 @@ module.exports = {
         toBotIndex: toBotIndex,
         htmlFormat: '<div>' +
                     '<span class="date">[' + moment().format("hh:mm") + ']</span> ' + 
-                    '<span class="name">&lt;' + CBotsName[botIndex] + '&gt;</span> ' + 
+                    '<span class="name">&lt;' + botName + '&gt;</span> ' + 
                     '<span class="msg">' + resp.message + '</span>' + 
                     '</div>',
       });
