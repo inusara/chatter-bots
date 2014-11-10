@@ -32,12 +32,15 @@
 		if(!isFirst && botMsg && botSpeech.prop('checked')) {
 			var msg = new SpeechSynthesisUtterance();
 			msg.voice = (voices) ? voices[botIndex] : null;
-			msg.voiceURI = 'native';	
-			msg.volume = 1; // 0 to 1
-			msg.rate = 10; // 0.1 to 10
-			msg.pitch = 2; //0 to 2
+			// disabled since it's causing problems in other browsers
+			// msg.voiceURI = 'native';	
+			// msg.volume = 1; // 0 to 1
+			// msg.rate = 10; // 0.1 to 10
+			// msg.pitch = 2; //0 to 2
+			// msg.text = botMsg
+			// msg.lang = 'en-US';
+
 			msg.text = botMsg
-			msg.lang = 'en-US';
 
 			msg.onend = function(e) {
 				sendMsg();
