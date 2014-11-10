@@ -26,10 +26,13 @@
 
 	var startChat = function(isFirst, botIndex, botMsg) {
 
+		var emotion = $('ul li input[type=radio]:checked', chatbot[botIndex]).val();
+			emotion = (emotion) ? emotion : '';
+
 		if(!isFirst && botMsg && botSpeech.prop('checked')) {
 			var msg = new SpeechSynthesisUtterance();
 			msg.voice = (voices) ? voices[botIndex] : null;
-			msg.voiceURI = 'native';
+			msg.voiceURI = 'native';	
 			msg.volume = 1; // 0 to 1
 			msg.rate = 10; // 0.1 to 10
 			msg.pitch = 2; //0 to 2
@@ -46,13 +49,13 @@
 		}
 		
 		function sendMsg() {
-			io.socket.post('/start/chat', { botIndex: botIndex, botMsg: botMsg }, function(resData, jwres) {
+			io.socket.post('/start/chat', { isFirst: isFirst, botIndex: botIndex, botMsg: botMsg, emotion: emotion }, function(resData, jwres) {
 				if(jwres.statusCode === 200) {
 					console.log(resData);
 					setTimeout(function() {
 						$('#chatlog').append(resData.htmlFormat);
 						startChat(false, resData.toBotIndex, resData.botMsg);
-					}, 1200);
+					}, 3000);
 				}
 			});			
 		}
@@ -80,5 +83,5 @@
 		$('input[type=radio]', clone).attr('name', 'bot2emotion');
 		$(clone).appendTo(chatbot[1]);
 	});
-	
+
 })();

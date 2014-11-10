@@ -48,8 +48,14 @@ module.exports = {
   },
 
   start: function (req, res) {
+    var isFirst = req.body.isFirst;
     var botIndex = req.body.botIndex;
     var botMsg = req.body.botMsg;
+    var emotion = req.body.emotion;
+
+    CBots[botIndex].params.cleanslate = isFirst;
+    CBots[botIndex].params.emotionaloutput = emotion;
+    CBots[botIndex].params.emotionalhistory = emotion;
 
     CBots[botIndex].write(botMsg, function(resp) {
       var toBotIndex = (botIndex == 0) ? 1 : 0;
