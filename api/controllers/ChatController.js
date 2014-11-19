@@ -9,6 +9,7 @@ var uuid = require('node-uuid');
 var Cleverbot = require('cleverbot-node');
 var CBots = [];
 var moment = require('moment');
+var request = require('request');
 
 module.exports = {
 	
@@ -38,12 +39,34 @@ module.exports = {
     
     //if session was created
     if(session_uuid) {
-      CBots = [new Cleverbot, new Cleverbot];
-      req.session.chat = { session_id: session_uuid };
-      res.ok();
+      getAvatarSessionToken();
     } else {
       res.forbidden("There's problem generating the session id. Please try again.");
     }
+
+    function getAvatarSessionToken() {
+      var domain = "https://staging.3d-avatar-store.com/dev/auth/json",
+          apikey = "4mXKzbvUgDRiy3IjjFdv4sSYmCV3soDSkDQqXkBx/ME5YDkagznxLj236mzk9JYoPvAKHErQJ=+ynwEPET0aW0PMAkH/jdiSMa9TYrZ/ES2vD/8Ua/CP29byeg7wodcRkvzdQDmFVtY2wOEkJ4s2/YFc0WiT9/oCi0B4C4xio+i0E0N0O000";
+
+      var options = {
+          url: domain,
+          headers: {
+              '3DASAPIKEY': apikey
+          }
+      };
+
+      function callback(error, response, body) {
+        if (!error && response.statusCode == 200) {
+            var info = JSON.parse(body);
+            var avatar_token = (info.apiSessionToken) ? info.apiSessionToken : '';
+        }
+        CBots = [new Cleverbot, new Cleverbot];
+        req.session.chat = { session_id: session_uuid };
+        res.json({ statusCode: response.statusCode, avatar_token: avatar_token });
+      }
+      request.post(options, callback);       
+    }
+
   },
 
   start: function (req, res) {

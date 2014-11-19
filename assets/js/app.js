@@ -18,7 +18,10 @@
 		var browserSessionId = generateBrowserSessionId();
 		io.socket.post('/init/chat', { bSId: browserSessionId }, function(resData, jwres) {
 			if(jwres.statusCode === 200) {
-				startChat(true, 0, topic);
+				if(resData.statusCode === 200) {
+					console.log(resData.avatar_token);
+				}
+				startChat(true, 0, topic);				
 			} else {
 				console.log(jwres.toString());
 			}
